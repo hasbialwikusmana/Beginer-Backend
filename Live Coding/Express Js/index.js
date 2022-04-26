@@ -1,22 +1,34 @@
 const express = require("express");
+const app = express();
 const bodyParser = require("body-parser");
 const productController = require("./src/controller/products");
+const commonMid = require("./src/middlewares/common");
 const categoryController = require("./src/controller/category");
+const categoryRouter = require("./src/routes/category");
+const productsRouter = require("./src/routes/products");
 
-const app = express();
+// app.use('/coba',commonMid.myMiddle)
+// // app.use(myMiddle)
 
-const myMiddle = (req, res, next) => {
-  console.log("Middleware");
-  next();
-};
+// app.get('/helo',commonMid.myMiddle, (req, res, next)=>{
+//     res.send('hello word')
+// })
 
-app.use(bodyParser.json());
-app.get("/products", productController.getProducts);
-app.post("/products", productController.addProduct);
-app.put("/products/:id", productController.updateProduct);
-app.delete("/products/:id", productController.deleteProduct);
+// products
+// app.get('/products',productController.getProduct)
+// app.post('/products', commonMid.validate, productController.insert)
+// app.put('/products/:id', productController.update)
+// app.delete('/products/:idproduct',productController.delete)
 
-app.get("/category", categoryController.getCategory);
+// category
+
+// app.get('/category', categoryController.getCategory)
+// app.post('/category', categoryController.insertCategory)
+// app.put('/category/:id', categoryController.updateCategory)
+// app.delete('/category/:id', categoryController.deleteCategory)
+app.use("/products", productsRouter);
+app.use("/category", categoryRouter);
+
 // let products = [
 //   {
 //     id: 1,
@@ -145,6 +157,12 @@ app.get("/category", categoryController.getCategory);
 //     message: "data berhasil di hapus dengan id = " + id,
 //   });
 // });
+
+app.all("*", (req, res, next) => {
+  res.status(404).json({
+    message: "url not found",
+  });
+});
 
 app.listen(4000, () => {
   console.log("Server starting on port 4000");
