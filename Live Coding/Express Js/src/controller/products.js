@@ -1,33 +1,31 @@
 let products = [
   {
     id: 1,
-    name: "Iphone X",
-    stock: 10,
-    price: 100000,
+    name: "baju",
+    price: 0,
+    stock: 0,
   },
 ];
 const productController = {
-  getProducts: (req, res, next) => {
-    res.json({
-      data: products,
-    });
-  },
-  addProduct: (req, res, next) => {
-    const { name, price, stock } = req.body;
+  insert: (req, res, next) => {
+    const { id, stock, name, price } = req.body;
+
     products.push({
+      id,
       name,
-      price,
       stock,
+      price,
     });
     res.json({
       message: "data berhasil ditambahkan",
     });
   },
-  updateProduct: (req, res, next) => {
+  update: (req, res, next) => {
     const { name, price, stock } = req.body;
     const id = req.params.id;
+
     products = products.map((item) => {
-      if (item.id == id) {
+      if (item.id === id) {
         const result = {
           id,
           name,
@@ -43,11 +41,17 @@ const productController = {
       message: "data berhasil di update",
     });
   },
-  deleteProduct: (req, res, next) => {
-    const id = req.params.id;
+  delete: (req, res, next) => {
+    const id = req.params.idproduct;
     products = products.filter((item) => item.id != id);
+
     res.json({
-      message: "data berhasil di hapus dengan id = " + id,
+      message: "adata berhasil di hapus dengan id = " + id,
+    });
+  },
+  getProduct: (req, res, next) => {
+    res.json({
+      data: products,
     });
   },
 };
